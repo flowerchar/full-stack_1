@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.spingboot.dao.UserDao">
+    <insert id="insert" parameterType="com.example.spingboot.entity.User">
+        INSERT INTO user (username, password) VALUES (#{username}, #{password})
+    </insert>
+
+    <update id="update" parameterType="com.example.spingboot.entity.User">
+        UPDATE user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar = #{avatar},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE from user WHERE id=#{id}
+    </delete>
+
+
+    <select id="findAll" resultType="com.example.spingboot.entity.User">
+        SELECT * FROM `user`
+    </select>
+
+    <select id="getById" resultType="com.example.spingboot.entity.User" parameterType="java.lang.Integer">
+        SELECT * FROM  `user` where id = #{id}
+    </select>
+
+    <select id="getByUser" resultType="com.example.spingboot.entity.User">
+        SELECT * from  user where username=#{username} and password=#{password}
+    </select>
+
+    <select id="findPage" resultType="com.example.spingboot.entity.User">
+        SELECT * from USER
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('#', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('#', #{email}, '#')
+            </if>
+        </where>
+        LIMIT #{pageNum}, #{pageSize}
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        select count(id) from user
+        <where>
+            <if test="username != null and username != ''">
+                and username like concat('%', #{username}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like concat('#', #{phone}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                and email like concat('#', #{email}, '#')
+            </if>
+        </where>
+    </select>
+
+</mapper>
